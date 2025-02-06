@@ -1,23 +1,4 @@
-export interface Scout {
-  id: string;
-  name: string;
-  level: number;
-  experience: number;
-  specialization: 'youth' | 'senior' | 'both';
-  regions: string[];
-  currentMission?: string;
-  stats: {
-    successfulMissions: number;
-    failedMissions: number;
-    playersDiscovered: number;
-    averageReportAccuracy: number;
-  };
-  salary: number;
-  contract: {
-    startDate: string;
-    endDate: string;
-  };
-}
+import { Scout } from './scout';
 
 export interface ScoutingMission {
   id: string;
@@ -32,7 +13,7 @@ export interface ScoutingMission {
     location: string;
     details: Record<string, any>;
   };
-  duration: number; // בימים
+  duration: number;
   startDate?: string;
   endDate?: string;
   budget: number;

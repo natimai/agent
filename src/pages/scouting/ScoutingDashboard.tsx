@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
-import { addScout, assignScout, unassignScout } from '../../store/slices/scoutingSlice';
+import { addScout } from '../../store/slices/scoutingSlice';
 import { updateTreasury } from '../../store/slices/gameSlice';
 import ScoutCard from '../../components/scouting/ScoutCard';
 import EventsList from './EventsList';
@@ -16,7 +16,7 @@ import PageWrapper from '../../components/common/PageWrapper';
 
 const ScoutingDashboard: React.FC = () => {
   const dispatch = useDispatch();
-  const { scouts, events, activeScouts } = useSelector((state: RootState) => state.scouting);
+  const { scouts } = useSelector((state: RootState) => state.scouting);
   const { treasury } = useSelector((state: RootState) => state.game);
   const { currentLevel } = useSelector((state: RootState) => state.office);
   const maxScouts = scoutManager.getMaxScouts(currentLevel);
@@ -83,7 +83,7 @@ const ScoutingDashboard: React.FC = () => {
             </div>
             <div className="stat">
               <span>סקאוטים פעילים:</span>
-              <span>{Object.keys(activeScouts).length}/{maxScouts}</span>
+              <span>{scouts.filter(s => s.currentMission).length}/{maxScouts}</span>
             </div>
           </div>
           <div className="scouts-info">
@@ -123,6 +123,7 @@ const ScoutingDashboard: React.FC = () => {
                   isActive={Boolean(scout.currentMission)}
                   isSelected={scout.id === selectedScout}
                   onSelect={() => handleScoutSelection(scout.id)}
+                  onCancelScout={() => {}}
                 />
               ))}
               {scouts.length === 0 && (
@@ -152,7 +153,7 @@ const ScoutingDashboard: React.FC = () => {
             ) : (
               <div className="events-section">
                 <h2>אירועים פעילים</h2>
-                <EventsList events={events} />
+                <EventsList events={[]} />
               </div>
             )}
           </div>

@@ -1,61 +1,65 @@
 export interface OfficeLevel {
-  id: number;
   level: number;
   name: string;
   description: string;
   maxPlayers: number;
-  maxScouts: number;
-  requiredBudget: number;
-  requiredReputation: number;
-  commissionBonus: number;
-  reputationBonus: number;
+  maxStaff: number;
+  commissionRate: number;
+  monthlyExpenses: number;
   upgradeCost: number;
   benefits: {
-    negotiationBonus: number;
-    scoutingSpeedBonus: number;
     reputationBonus: number;
+    scoutingBonus: number;
+    negotiationBonus: number;
+  };
+  requirements: {
+    budget: number;
+    reputation: number;
   };
 }
 
 export interface OfficeBenefits {
+  reputationBonus: number;
+  scoutingBonus: number;
   negotiationBonus: number;
-  reputationGain: number;
-  transferFeeBonus: number;
-  scoutingSpeedBonus: number;
 }
 
 export interface OfficeStats {
   totalTransfers: number;
-  totalCommissions: number;
-  activeNegotiations: number;
-  reputation: number;
+  successfulNegotiations: number;
+  failedNegotiations: number;
+  totalSpent: number;
+  totalEarned: number;
+  averageTransferValue: number;
+  bestTransfer: {
+    playerId: string;
+    playerName: string;
+    amount: number;
+    date: string;
+  };
 }
 
 export interface MonthlyReport {
-  date: string;
-  income: {
-    commissions: number;
-    sponsorships: number;
-    bonuses: number;
-    other: number;
+  month: number;
+  year: number;
+  transfers: {
+    in: number;
+    out: number;
+    spent: number;
+    earned: number;
   };
-  expenses: {
-    rent: number;
-    utilities: number;
-    salaries: number;
-    misc: number;
+  negotiations: {
+    successful: number;
+    failed: number;
   };
-  balance: number;
-  stats: {
-    totalTransfers: number;
-    successfulDeals: number;
-    failedDeals: number;
-    activeNegotiations: number;
-  };
+  expenses: number;
+  revenue: number;
 }
 
-export interface OfficeState {
-  currentLevel: number;
+export interface ExtendedOfficeState {
+  level: OfficeLevel;
+  experience: number;
+  lastUpgrade: string;
   stats: OfficeStats;
   monthlyReports: MonthlyReport[];
 }
@@ -64,86 +68,96 @@ export const OFFICE_LEVELS: OfficeLevel[] = [
   {
     level: 1,
     name: 'משרד מתחיל',
-    description: 'משרד קטן ובסיסי לסוכן מתחיל',
-    maxPlayers: 5,
-    maxScouts: 1,
+    description: 'משרד בסיסי עם ציוד מינימלי',
+    maxPlayers: 10,
     maxStaff: 2,
     commissionRate: 5,
-    monthlyExpenses: 5000,
-    upgradeCost: 50000,
-    requiredReputation: 20,
+    monthlyExpenses: 10000,
+    upgradeCost: 100000,
     benefits: {
-      negotiationBonus: 0,
       reputationBonus: 0,
-      scoutingSpeedBonus: 0
+      scoutingBonus: 0,
+      negotiationBonus: 0
+    },
+    requirements: {
+      budget: 0,
+      reputation: 0
     }
   },
   {
     level: 2,
-    name: 'משרד מתפתח',
-    description: 'משרד בינוני עם יכולות מורחבות',
-    maxPlayers: 10,
-    maxScouts: 2,
+    name: 'משרד מקצועי',
+    description: 'משרד מאובזר עם ציוד מקצועי',
+    maxPlayers: 20,
     maxStaff: 4,
     commissionRate: 7,
-    monthlyExpenses: 12000,
-    upgradeCost: 150000,
-    requiredReputation: 50,
+    monthlyExpenses: 25000,
+    upgradeCost: 250000,
     benefits: {
-      negotiationBonus: 5,
       reputationBonus: 5,
-      scoutingSpeedBonus: 10
+      scoutingBonus: 10,
+      negotiationBonus: 5
+    },
+    requirements: {
+      budget: 500000,
+      reputation: 20
     }
   },
   {
     level: 3,
-    name: 'משרד מקצועי',
-    description: 'משרד גדול עם צוות מקצועי',
-    maxPlayers: 20,
-    maxScouts: 4,
-    maxStaff: 8,
+    name: 'משרד מתקדם',
+    description: 'משרד מודרני עם טכנולוגיה מתקדמת',
+    maxPlayers: 35,
+    maxStaff: 7,
     commissionRate: 10,
-    monthlyExpenses: 25000,
+    monthlyExpenses: 50000,
     upgradeCost: 500000,
-    requiredReputation: 100,
     benefits: {
-      negotiationBonus: 10,
       reputationBonus: 10,
-      scoutingSpeedBonus: 20
+      scoutingBonus: 20,
+      negotiationBonus: 10
+    },
+    requirements: {
+      budget: 2000000,
+      reputation: 40
     }
   },
   {
     level: 4,
     name: 'משרד יוקרתי',
-    description: 'משרד מוביל עם מוניטין גבוה',
-    maxPlayers: 35,
-    maxScouts: 6,
-    maxStaff: 12,
+    description: 'משרד מפואר עם מיטב הציוד והטכנולוגיה',
+    maxPlayers: 50,
+    maxStaff: 10,
     commissionRate: 12,
-    monthlyExpenses: 50000,
-    upgradeCost: 1500000,
-    requiredReputation: 200,
+    monthlyExpenses: 100000,
+    upgradeCost: 1000000,
     benefits: {
-      negotiationBonus: 15,
       reputationBonus: 20,
-      scoutingSpeedBonus: 30
+      scoutingBonus: 30,
+      negotiationBonus: 20
+    },
+    requirements: {
+      budget: 5000000,
+      reputation: 60
     }
   },
   {
     level: 5,
     name: 'משרד עילית',
-    description: 'משרד ברמה הגבוהה ביותר',
-    maxPlayers: 50,
-    maxScouts: 8,
-    maxStaff: 16,
+    description: 'משרד ברמה הגבוהה ביותר עם כל האמצעים האפשריים',
+    maxPlayers: 75,
+    maxStaff: 15,
     commissionRate: 15,
-    monthlyExpenses: 100000,
-    upgradeCost: 5000000,
-    requiredReputation: 500,
+    monthlyExpenses: 200000,
+    upgradeCost: 2000000,
     benefits: {
-      negotiationBonus: 25,
       reputationBonus: 30,
-      scoutingSpeedBonus: 50
+      scoutingBonus: 50,
+      negotiationBonus: 30
+    },
+    requirements: {
+      budget: 10000000,
+      reputation: 80
     }
   }
 ]; 

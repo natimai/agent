@@ -1,73 +1,56 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TransferMarket, TransferOffer, CompletedTransfer, MarketTrend } from '../../types/transfers';
+import { RootState } from '../store';
 
-interface TransfersState {
-  market: TransferMarket;
-  isLoading: boolean;
-  error: string | null;
-}
-
-const initialState: TransfersState = {
-  market: {
-    activeOffers: [],
-    completedTransfers: [],
-    marketTrends: [],
-    negotiations: []
-  },
-  isLoading: false,
-  error: null
+const initialState: TransferMarket = {
+  activeOffers: [],
+  completedTransfers: [],
+  marketTrends: [],
+  negotiations: []
 };
 
 const transfersSlice = createSlice({
   name: 'transfers',
   initialState,
   reducers: {
-    addOffer: (state, action: PayloadAction<TransferOffer>) => {
-      state.market.activeOffers.push(action.payload);
+    addTransferOffer: (state, action: PayloadAction<TransferOffer>) => {
+      state.activeOffers.push(action.payload);
     },
-    updateOffer: (state, action: PayloadAction<Partial<TransferOffer> & { id: string }>) => {
-      const offer = state.market.activeOffers.find(o => o.id === action.payload.id);
+    updateTransferOffer: (state, action: PayloadAction<{ id: string; changes: Partial<TransferOffer> }>) => {
+      const { id, changes } = action.payload;
+      const offer = state.activeOffers.find(o => o.id === id);
       if (offer) {
-        Object.assign(offer, action.payload);
+        Object.assign(offer, changes);
       }
     },
-    completeTransfer: (state, action: PayloadAction<CompletedTransfer>) => {
-      // מחיקת ההצעה הפעילה
-      state.market.activeOffers = state.market.activeOffers.filter(
-        o => o.playerId !== action.payload.playerId
+    addCompletedTransfer: (state, action: PayloadAction<CompletedTransfer>) => {
+      state.completedTransfers.push(action.payload);
+      state.activeOffers = state.activeOffers.filter(
+        offer => offer.id !== action.payload.id
       );
-      // הוספה להעברות שהושלמו
-      state.market.completedTransfers.push(action.payload);
     },
     updateMarketTrends: (state, action: PayloadAction<MarketTrend[]>) => {
-      state.market.marketTrends = action.payload;
+      state.marketTrends = action.payload;
     },
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
-    updateTransferOffer: (state, action: PayloadAction<TransferOffer>) => {
-      const index = state.market.activeOffers.findIndex(
-        offer => offer.id === action.payload.id
+    removeTransferOffer: (state, action: PayloadAction<string>) => {
+      state.activeOffers = state.activeOffers.filter(
+        offer => offer.id !== action.payload
       );
-      
-      if (index !== -1) {
-        state.market.activeOffers[index] = action.payload;
-      }
     }
   }
 });
 
-export const { 
-  addOffer, 
-  updateOffer, 
-  completeTransfer, 
+export const {
+  addTransferOffer,
+  updateTransferOffer,
+  addCompletedTransfer,
   updateMarketTrends,
-  setLoading,
-  setError,
-  updateTransferOffer
+  removeTransferOffer
 } = transfersSlice.actions;
+
+export const selectTransfers = (state: RootState) => state.transfers;
+export const selectActiveOffers = (state: RootState) => state.transfers.activeOffers;
+export const selectCompletedTransfers = (state: RootState) => state.transfers.completedTransfers;
+export const selectMarketTrends = (state: RootState) => state.transfers.marketTrends;
 
 export default transfersSlice.reducer; 

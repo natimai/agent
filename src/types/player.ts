@@ -7,90 +7,94 @@ export interface PlayerAttributes {
   dribbling: number;
   defending: number;
   physical: number;
-  handling?: number; // רק לשוערים
-  reflexes?: number; // רק לשוערים
-  positioning?: number; // רק לשוערים
-  // תכונות נוספות לפי הצורך
+  handling?: number;
+  reflexes?: number;
+  positioning?: number;
+  goalkeeping: number;
 }
 
 export interface PlayerStats {
   appearances: number;
   goals: number;
   assists: number;
+  cleanSheets: number;
   yellowCards: number;
   redCards: number;
-  minutesPlayed: number;
-  cleanSheets?: number; // רק לשוערים
-  averageRating: number;
+  rating: number;
+  form: number;
 }
 
-export interface PlayerPosition {
-  main: 'GK' | 'CB' | 'LB' | 'RB' | 'CDM' | 'CM' | 'CAM' | 'LW' | 'RW' | 'ST';
-  secondary?: PlayerPosition['main'][];
-}
+export type PlayerPosition = 'GK' | 'CB' | 'LB' | 'RB' | 'DM' | 'CM' | 'LM' | 'RM' | 'AM' | 'ST';
 
 export interface PlayerContract {
+  team: string;
   startDate: string;
   endDate: string;
-  value: number;
-  club?: string;
+  monthsRemaining: number;
+  salary: number;
+  bonuses: ContractBonus[];
+  releaseClause?: number;
+}
+
+export interface ContractBonus {
+  type: 'APPEARANCE' | 'GOAL' | 'ASSIST' | 'CLEAN_SHEET';
+  amount: number;
+  threshold: number;
 }
 
 export interface PlayerInjury {
   type: string;
+  severity: 'MINOR' | 'MODERATE' | 'SEVERE';
   startDate: string;
-  durationDays: number;
-  isRecovered: boolean;
+  endDate: string;
 }
 
 export interface LastMatch {
   date: string;
   opponent: string;
   result: string;
-  stats: {
-    minutesPlayed: number;
-    goals: number;
-    assists: number;
-    rating: number;
-  };
+  rating: number;
+  goals: number;
+  assists: number;
+  cleanSheet?: boolean;
 }
 
 export interface Player {
   id: string;
   name: string;
-  age: number;
   nationality: string;
-  image?: string;
+  age: number;
   position: PlayerPosition;
+  secondaryPosition?: PlayerPosition;
+  teamId: string;
   value: number;
-  wage: number;
   potential: number;
-  form: number;
-  isInjured: boolean;
   attributes: PlayerAttributes;
+  contract: PlayerContract;
   stats: PlayerStats;
-  injuryHistory: PlayerInjury[];
+  form: number;
+  morale: number;
+  fitness: number;
+  injury?: PlayerInjury;
   lastMatch?: LastMatch;
-  contract: {
-    startDate: string;
-    endDate: string;
-    releaseClause?: number;
-  };
-  development: {
-    trainingPerformance: number;
-    lastProgressDate: string;
-    potentialGrowth: number;
-  };
-  marketStatus: {
-    isTransferListed: boolean;
-    isLoanListed: boolean;
-    askingPrice?: number;
-    interestedClubs: string[];
-  };
   personality: {
-    determination: number;
-    leadership: number;
-    teamwork: number;
-    pressure: number;
+    ambition: number;
+    loyalty: number;
+    professionalism: number;
   };
-} 
+  isDiscovered: boolean;
+  scoutingProgress?: number;
+}
+
+export const POSITION_NAMES: Record<PlayerPosition, string> = {
+  GK: 'שוער',
+  CB: 'בלם מרכזי',
+  LB: 'מגן שמאלי',
+  RB: 'מגן ימני',
+  DM: 'קשר הגנתי',
+  CM: 'קשר מרכזי',
+  LM: 'קשר שמאלי',
+  RM: 'קשר ימני',
+  AM: 'קשר התקפי',
+  ST: 'חלוץ'
+}; 

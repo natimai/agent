@@ -70,6 +70,17 @@ export interface GameState {
   events: GameEvent[];
   loading: boolean;
   error: string | null;
+  treasury: number;
+  currentDate: string;
+  lastUpdate: string;
+  gameSpeed: GameSpeed;
+  isPaused: boolean;
+  reputation: number;
+  monthlyReports: MonthlyReport[];
+  salaryPayments: SalaryPayment[];
+  notifications: GameEvent[];
+  season: number;
+  difficulty: string;
 }
 
 export interface GameSave {

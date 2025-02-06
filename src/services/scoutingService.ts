@@ -1,14 +1,15 @@
-import store from '../store';
+import { store } from '../store';
 import { Player } from '../types/player';
 import { playerGenerator } from './playerGenerator';
 import { addPlayer, updatePlayer } from '../store/slices/playersSlice';
-import { updateTreasury } from '../store/slices/gameSlice';
-import { Country } from '../data/countries';
+import { updateTreasury } from '../store/slices/treasurySlice';
+import { Country } from '../types/country';
 import { Position } from '../types/position';
 import { Scout } from '../types/scout';
 import { countries } from '../data/countries';
-import { addScout, updateScoutProgress, payMonthlySalaries } from '../store/slices/scoutingSlice';
+import { addScout } from '../store/slices/scoutingSlice';
 import { addSalaryPayment } from '../store/slices/gameSlice';
+import { RootState, SalaryPayment } from '../types/types';
 
 class ScoutingService {
   private readonly BASE_SCOUTING_TIME = 7; // ימים בסיס
@@ -20,22 +21,94 @@ class ScoutingService {
 
   private scouts: Map<string, Scout> = new Map();
 
+  discoverNewPlayers(count: number): void {
+    const state = store.getState() as unknown as RootState;
+    const { level } = state.office;
+    const treasury = state.treasury;
+
+    // עלות גילוי שחקן חדש
+    const costPerPlayer = 1000 * level.level;
+    const totalCost = costPerPlayer * count;
+
+    if (treasury.balance < totalCost) {
+      throw new Error('אין מספיק תקציב לגילוי שחקנים חדשים');
+    }
+
+    // מחיר הגילוי
+    store.dispatch(updateTreasury({ balance: treasury.balance - totalCost }));
+
+    // יצירת שחקנים חדשים
+    for (let i = 0; i < count; i++) {
+      const player = playerGenerator.generatePlayer({});
+      store.dispatch(addPlayer({
+        ...player,
+        isDiscovered: false
+      }));
+    }
+  }
+
+  startScouting(playerId: string): void {
+    const state = store.getState() as unknown as RootState;
+    const { players } = state.players;
+    const { scouts } = state.scouting;
+    const treasury = state.treasury;
+
+    const player = players.find((p: Player) => p.id === playerId);
+    if (!player) {
+      throw new Error('השחקן לא נמצא');
+    }
+
+    if (player.isDiscovered) {
+      throw new Error('השחקן כבר התגלה');
+    }
+
+    // בדיקה אם יש סקאוט פנוי
+    const availableScout = scouts.find((s: Scout) => !s.currentMission);
+    if (!availableScout) {
+      throw new Error('אין סקאוט פנוי');
+    }
+
+    // עלות הסקאוטינג
+    const scoutingCost = this.calculateScoutingCost(player);
+    if (treasury.balance < scoutingCost) {
+      throw new Error('אין מספיק תקציב לסקאוטינג');
+    }
+
+    store.dispatch(updateTreasury({ balance: treasury.balance - scoutingCost }));
+
+    // עדכון השחקן כמגולה
+    store.dispatch(updatePlayer({
+      id: player.id,
+      changes: {
+        isDiscovered: true,
+        scoutingProgress: 0
+      }
+    }));
+  }
+
+  private calculateScoutingCost(player: Player): number {
+    const basePrice = 5000;
+    const ageMultiplier = player.age < 23 ? 1.5 : 1;
+    const potentialMultiplier = 1.2; // יש להחליף עם חישוב אמיתי של פוטנציאל
+    return Math.floor(basePrice * ageMultiplier * potentialMultiplier);
+  }
+
   startScoutingMission(countryId: string, duration: number = 30): void {
-    const state = store.getState();
+    const state = store.getState() as unknown as RootState;
     const country = countries.find(c => c.id === countryId);
     
     if (!country) throw new Error('מדינה לא נמצאה');
     
     const missionCost = country.scoutingCost * (duration / 30);
     
-    if (state.game.treasury >= missionCost) {
+    if (state.treasury.balance >= missionCost) {
       this.scoutingMissions.set(countryId, {
         country,
         progress: 0,
         remainingDays: duration
       });
       
-      store.dispatch(updateTreasury(-missionCost));
+      store.dispatch(updateTreasury({ balance: state.treasury.balance - missionCost }));
     } else {
       throw new Error('אין מספיק תקציב למשימת סקאוטינג');
     }
@@ -59,15 +132,13 @@ class ScoutingService {
     for (let i = 0; i < playerCount; i++) {
       const position = this.getRandomPositionWithBonus(country);
       const player = playerGenerator.generatePlayer({
-        position,
-        nationality: country.code,
-        nameGenerator: country.playerNameGenerator,
-        minRating: country.baseRatingRange.min,
-        maxRating: country.baseRatingRange.max,
-        attributeModifiers: country.style.attributes
+        position
       });
 
-      store.dispatch(addPlayer(player));
+      store.dispatch(addPlayer({
+        ...player,
+        nationality: country.code
+      }));
     }
 
     this.scoutingMissions.delete(countryId);
@@ -83,11 +154,17 @@ class ScoutingService {
     return this.generateRandomPosition();
   }
 
+  private generateRandomPosition(): Position {
+    const positions: Position[] = ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'];
+    return positions[Math.floor(Math.random() * positions.length)];
+  }
+
   hireScout(scout: Scout): void {
-    const state = store.getState();
-    if (state.game.treasury >= scout.cost) {
+    const state = store.getState() as unknown as RootState;
+    const salary = scout.salary * 12; // עלות שנתית
+    if (state.treasury.balance >= salary) {
       this.scouts.set(scout.id, scout);
-      store.dispatch(updateTreasury(-scout.cost));
+      store.dispatch(updateTreasury({ balance: state.treasury.balance - salary }));
     } else {
       throw new Error('אין מספיק תקציב לגיוס סקאוט');
     }
@@ -107,11 +184,7 @@ class ScoutingService {
     // משפיע על איכות השחקנים שימצאו
     const discoveryBonus = (scout.level * 0.1) + (scout.abilities.evaluation * 0.005);
 
-    this.startScoutingMission(countryId, duration, {
-      scoutId,
-      efficiencyBonus,
-      discoveryBonus
-    });
+    this.startScoutingMission(countryId, duration);
   }
 
   private generatePlayersWithScout(scout: Scout, country: Country, count: number): void {
@@ -120,15 +193,13 @@ class ScoutingService {
       const baseRating = this.calculateBaseRating(country, scout);
       
       const player = playerGenerator.generatePlayer({
-        position,
-        nationality: country.code,
-        nameGenerator: country.playerNameGenerator,
-        minRating: baseRating - 5,
-        maxRating: baseRating + 5,
-        attributeModifiers: country.style.attributes
+        position
       });
 
-      store.dispatch(addPlayer(player));
+      store.dispatch(addPlayer({
+        ...player,
+        nationality: country.code
+      }));
     }
   }
 
@@ -145,39 +216,42 @@ class ScoutingService {
   }
 
   updateScoutingProgress() {
-    const state = store.getState();
-    const { scouts } = state.scouting;
+    const state = store.getState() as unknown as RootState;
+    const { players } = state.players;
     
-    scouts.forEach(scout => {
-      if (scout.currentMission) {
-        const progress = Math.min(100, (scout.scoutingProgress || 0) + this.calculateProgressRate(scout));
-        store.dispatch(updateScoutProgress({ scoutId: scout.id, progress }));
+    players.forEach(player => {
+      if (player.scoutingProgress !== undefined && player.scoutingProgress < 100) {
+        const progress = Math.min(100, player.scoutingProgress + 10);
+        store.dispatch(updatePlayer({ 
+          id: player.id, 
+          changes: { 
+            scoutingProgress: progress 
+          } 
+        }));
       }
     });
   }
 
-  calculateProgressRate(scout: Scout): number {
-    return scout.level * 2 + scout.abilities.evaluation * 0.5;
-  }
-
   async payMonthlySalaries() {
     const totalSalaries = this.calculateMonthlySalaries();
-    const state = store.getState();
+    const state = store.getState() as unknown as RootState;
     
-    if (state.game.treasury < totalSalaries.total) {
+    if (state.treasury.balance < totalSalaries.total) {
       return {
         success: false,
         message: 'אין מספיק כסף לתשלום משכורות',
-        missing: totalSalaries.total - state.game.treasury
+        missing: totalSalaries.total - state.treasury.balance
       };
     }
 
-    store.dispatch(updateTreasury(-totalSalaries.total));
-    store.dispatch(addSalaryPayment({
+    store.dispatch(updateTreasury({ balance: state.treasury.balance - totalSalaries.total }));
+    const payment: SalaryPayment = {
       date: new Date().toISOString(),
       amount: totalSalaries.total,
-      details: totalSalaries.details
-    }));
+      scoutId: 'all',
+      type: 'SCOUT_SALARY'
+    };
+    store.dispatch(addSalaryPayment(payment));
 
     return {
       success: true,

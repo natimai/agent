@@ -23,6 +23,7 @@ import {
   Stack,
   useTheme,
   useMediaQuery,
+  Container,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -44,8 +45,8 @@ import {
   SwapHoriz as TransferIcon,
   ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
-import { RootState } from '../store';
-import { formatCurrency } from '../utils/formatters';
+import { RootState } from '../types/store';
+import { formatCurrency } from '../utils/format';
 import { advanceWeek } from '../store/slices/gameSlice';
 import { processMonthlyFinances } from '../store/slices/financeSlice';
 import TopNavigation from './layout/TopNavigation';
@@ -78,7 +79,7 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -106,47 +107,19 @@ const Layout = ({ children }: LayoutProps) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      {!isMobile && <Sidebar open={sidebarOpen} onToggle={handleSidebarToggle} />}
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <TopNavigation />
+      
+      <Container component="main" sx={{ 
+        flexGrow: 1, 
+        py: 2,
+        mt: { xs: 7, sm: 8 }, // מרווח מהניווט העליון
+        mb: { xs: 7, sm: 0 }  // מרווח מהניווט התחתון במובייל
+      }}>
+        {children}
+      </Container>
 
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          width: '100%',
-          minHeight: '100vh',
-          pt: { xs: '112px', sm: '64px' },
-          pb: { xs: '128px', sm: '24px' },
-          px: { xs: 2, sm: 3 },
-          transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-          ...(sidebarOpen && !isMobile && {
-            marginRight: '240px',
-            width: `calc(100% - 240px)`,
-            transition: theme.transitions.create(['margin', 'width'], {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-          }),
-        }}
-      >
-        <TopNavigation sidebarOpen={sidebarOpen} onSidebarToggle={handleSidebarToggle} />
-        
-        <Box sx={{ 
-          maxWidth: { sm: '100%', md: '1200px' },
-          mx: 'auto',
-          p: { xs: 1, sm: 2, md: 3 },
-          borderRadius: 2,
-        }}>
-          {children}
-        </Box>
-
-        {isMobile && <BottomNavigation />}
-      </Box>
-
-      <ToastContainer />
+      <BottomNavigation />
     </Box>
   );
 };

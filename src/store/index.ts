@@ -10,6 +10,7 @@ import scoutingReducer from './slices/scoutingSlice'
 import contactsReducer from './slices/contactsSlice'
 import missionsReducer from './slices/missionsSlice'
 import eventsReducer from './slices/eventsSlice'
+import officeReducer from './slices/officeSlice'
 
 export const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ export const store = configureStore({
     contacts: contactsReducer,
     missions: missionsReducer,
     events: eventsReducer,
+    office: officeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -32,4 +34,4 @@ export const store = configureStore({
 })
 
 export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch 
+export type AppDispatch = typeof store.dispatch

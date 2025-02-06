@@ -6,6 +6,9 @@ export interface Scout {
   level: number;
   salary: number;
   lastPaidDate: string;
+  experience: number;
+  specialization: 'youth' | 'senior' | 'both';
+  regions: string[];
   scoutingProgress?: number;
   operationalCosts: {
     baseDaily: number;
@@ -28,6 +31,14 @@ export interface Scout {
     successfulFinds: number;
     reportsSubmitted: number;
     accuracy: number;
+    successfulMissions: number;
+    failedMissions: number;
+    playersDiscovered: number;
+    averageReportAccuracy: number;
+  };
+  contract: {
+    startDate: string;
+    endDate: string;
   };
 }
 

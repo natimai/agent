@@ -1,7 +1,7 @@
 import React from 'react';
 import { Player } from '../../types/player';
+import { POSITION_NAMES } from '../../types/player';
 import './PlayerCard.css';
-import { scoutingService } from '../../services/scoutingService';
 
 interface PlayerCardProps {
   player: Player;
@@ -11,10 +11,8 @@ interface PlayerCardProps {
 
 const PlayerCard = ({ player, onScout, onCancelScout }: PlayerCardProps) => {
   const getVisibleAttributes = () => {
-    if (!player.scoutingProgress) return {};
-    
-    const progress = player.scoutingProgress / 100;
-    const visibleCount = Math.floor(Object.keys(player.attributes).length * progress);
+    const progress = player.scoutingProgress || 0;
+    const visibleCount = Math.floor(Object.keys(player.attributes).length * (progress / 100));
     
     return Object.fromEntries(
       Object.entries(player.attributes)
@@ -32,10 +30,10 @@ const PlayerCard = ({ player, onScout, onCancelScout }: PlayerCardProps) => {
       </div>
 
       <div className="player-position">
-        <span className="main-position">{player.position.main}</span>
-        {player.position.secondary?.map(pos => (
-          <span key={pos} className="secondary-position">{pos}</span>
-        ))}
+        <span className="main-position">{POSITION_NAMES[player.position]}</span>
+        {player.secondaryPosition && (
+          <span className="secondary-position">{POSITION_NAMES[player.secondaryPosition]}</span>
+        )}
       </div>
 
       {player.scoutingProgress ? (
@@ -45,7 +43,7 @@ const PlayerCard = ({ player, onScout, onCancelScout }: PlayerCardProps) => {
               className="progress-bar"
               style={{ width: `${player.scoutingProgress}%` }}
             />
-            <span>{Math.floor(player.scoutingProgress)}%</span>
+            <span>{player.scoutingProgress}%</span>
           </div>
           <button 
             className="cancel-button"
@@ -59,7 +57,7 @@ const PlayerCard = ({ player, onScout, onCancelScout }: PlayerCardProps) => {
           className="scout-button"
           onClick={onScout}
         >
-          התחל סקאוטינג (₪{scoutingService.getScoutingCost().toLocaleString()})
+          התחל סקאוטינג
         </button>
       )}
 

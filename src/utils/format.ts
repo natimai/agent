@@ -7,13 +7,12 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount);
 };
 
-export const formatDate = (date: string | Date): string => {
-  const d = new Date(date);
+export const formatDate = (date: string): string => {
   return new Intl.DateTimeFormat('he-IL', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
-  }).format(d);
+  }).format(new Date(date));
 };
 
 export const formatNumber = (num: number): string => {

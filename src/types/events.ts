@@ -1,4 +1,5 @@
 import { Player } from './player';
+import { GameEvent } from './game';
 
 export type TransferOfferData = {
   player: Player;
@@ -39,7 +40,33 @@ export type GameEventData =
   | { type: 'INJURY'; data: InjuryData }
   | { type: 'MATCH_RESULT'; data: MatchResultData };
 
-export type EventType = 'MATCH' | 'TRAINING' | 'MEETING' | 'SCOUTING' | 'OTHER';
+export interface EventsState {
+  events: GameEvent[];
+  loading: boolean;
+  error: string | null;
+  filters: {
+    type: string | null;
+    importance: boolean | null;
+    dateRange: {
+      start: string | null;
+      end: string | null;
+    };
+  };
+  sortBy: 'date' | 'importance' | 'type';
+  sortDirection: 'asc' | 'desc';
+}
+
+export const EVENT_TYPES = {
+  TRANSFER: 'TRANSFER',
+  SCOUTING: 'SCOUTING',
+  FINANCE: 'FINANCE',
+  PLAYER: 'PLAYER',
+  MISSION: 'MISSION',
+  OFFICE: 'OFFICE',
+  SYSTEM: 'SYSTEM'
+} as const;
+
+export type EventType = keyof typeof EVENT_TYPES;
 
 export interface Event {
   id: string;
@@ -69,10 +96,4 @@ export interface Event {
     message: string;
     sent: boolean;
   }[];
-}
-
-export interface EventsState {
-  events: Event[];
-  loading: boolean;
-  error: string | null;
 } 

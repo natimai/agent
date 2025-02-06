@@ -7,6 +7,7 @@ import { AssetsState } from '../types/assets';
 import { EquipmentState } from '../store/slices/equipmentSlice';
 import { ScoutingState } from '../types/scouting';
 import { ContactsState } from '../types/contacts';
+import { EventsState } from '../types/events';
 
 export interface RootState {
   auth: AuthState;
@@ -18,4 +19,5 @@ export interface RootState {
   equipment: EquipmentState;
   scouting: ScoutingState;
   contacts: ContactsState;
+  events: EventsState;
 } 

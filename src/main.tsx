@@ -1,21 +1,36 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import store from './store'
+import { store } from './store'
 import App from './App'
+import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import theme from './theme'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
-const container = document.getElementById('root')
-if (!container) throw new Error('Failed to find the root element')
-const root = createRoot(container)
-
-root.render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+          <ToastContainer
+            position="bottom-left"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+        </ThemeProvider>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 ) 

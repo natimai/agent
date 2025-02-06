@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Player, PlayerInjury } from '../../types/player';
+import { RootState } from '../store';
 
 interface PlayersState {
   players: Player[];
-  loading: boolean;
+  isLoading: boolean;
   error: string | null;
   filters: {
     position: string | null;
@@ -94,7 +95,7 @@ const initialPlayers: Player[] = [
 
 const initialState: PlayersState = {
   players: initialPlayers,
-  loading: false,
+  isLoading: false,
   error: null,
   filters: {
     position: null,
@@ -120,17 +121,18 @@ const playersSlice = createSlice({
     addPlayer: (state, action: PayloadAction<Player>) => {
       state.players.push(action.payload);
     },
-    updatePlayer: (state, action: PayloadAction<Player>) => {
-      const index = state.players.findIndex(player => player.id === action.payload.id);
-      if (index !== -1) {
-        state.players[index] = action.payload;
+    updatePlayer: (state, action: PayloadAction<{ id: string; changes: Partial<Player> }>) => {
+      const { id, changes } = action.payload;
+      const player = state.players.find(p => p.id === id);
+      if (player) {
+        Object.assign(player, changes);
       }
     },
     removePlayer: (state, action: PayloadAction<string>) => {
       state.players = state.players.filter(player => player.id !== action.payload);
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+      state.isLoading = action.payload;
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
@@ -275,5 +277,10 @@ export const {
   resetFilters,
   setSort
 } = playersSlice.actions;
+
+export const selectPlayers = (state: RootState) => state.players.players;
+export const selectPlayerById = (state: RootState, id: string) => state.players.players.find(p => p.id === id);
+export const selectIsLoading = (state: RootState) => state.players.isLoading;
+export const selectError = (state: RootState) => state.players.error;
 
 export default playersSlice.reducer; 
