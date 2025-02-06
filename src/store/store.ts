@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../types/types';
 import playersReducer from './slices/playersSlice';
 import transfersReducer from './slices/transfersSlice';
 import officeReducer from './slices/officeSlice';
@@ -41,6 +40,7 @@ export const store = configureStore({
     }),
 });
 
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();

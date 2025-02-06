@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface AgentState {
+  id: string;
+  name: string;
   level: number;
   experience: number;
   reputation: number;
@@ -11,15 +13,38 @@ export interface AgentState {
     marketing: number;
   };
   achievements: string[];
-  stats: {
+  statistics: {
     totalDeals: number;
     successfulDeals: number;
     failedDeals: number;
     totalEarnings: number;
+    activeNegotiations: number;
+    averageCommission: number;
+    bestDeal: {
+      amount: number;
+      playerName: string;
+      date: string;
+    };
   };
+  specializations: {
+    id: string;
+    name: string;
+    level: number;
+    description: string;
+  }[];
+  badges: {
+    id: string;
+    title: string;
+    description: string;
+    date: string;
+    rewardAmount: number;
+    rewardType: 'MONEY' | 'REPUTATION' | 'EXPERIENCE';
+  }[];
 }
 
 const initialState: AgentState = {
+  id: '1',
+  name: 'סוכן חדש',
   level: 1,
   experience: 0,
   reputation: 50,
@@ -30,12 +55,21 @@ const initialState: AgentState = {
     marketing: 1,
   },
   achievements: [],
-  stats: {
+  statistics: {
     totalDeals: 0,
     successfulDeals: 0,
     failedDeals: 0,
     totalEarnings: 0,
+    activeNegotiations: 0,
+    averageCommission: 0,
+    bestDeal: {
+      amount: 0,
+      playerName: '',
+      date: new Date().toISOString()
+    }
   },
+  specializations: [],
+  badges: []
 };
 
 const agentSlice = createSlice({
@@ -44,7 +78,6 @@ const agentSlice = createSlice({
   reducers: {
     gainExperience: (state, action: PayloadAction<number>) => {
       state.experience += action.payload;
-      // בדיקת עלייה ברמה
       if (state.experience >= state.level * 1000) {
         state.level += 1;
         state.experience = 0;
@@ -63,11 +96,26 @@ const agentSlice = createSlice({
         state.achievements.push(action.payload);
       }
     },
-    updateStats: (state, action: PayloadAction<Partial<AgentState['stats']>>) => {
-      state.stats = { ...state.stats, ...action.payload };
+    updateStats: (state, action: PayloadAction<Partial<AgentState['statistics']>>) => {
+      state.statistics = { ...state.statistics, ...action.payload };
     },
+    addSpecialization: (state, action: PayloadAction<AgentState['specializations'][0]>) => {
+      state.specializations.push(action.payload);
+    },
+    addBadge: (state, action: PayloadAction<AgentState['badges'][0]>) => {
+      state.badges.push(action.payload);
+    }
   },
 });
 
-export const { gainExperience, updateReputation, improveSkill, addAchievement, updateStats } = agentSlice.actions;
+export const { 
+  gainExperience, 
+  updateReputation, 
+  improveSkill, 
+  addAchievement, 
+  updateStats,
+  addSpecialization,
+  addBadge
+} = agentSlice.actions;
+
 export default agentSlice.reducer; 

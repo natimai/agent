@@ -70,11 +70,17 @@ export interface MonthlyReport {
     other: number;
   };
   balance: number;
+  stats: {
+    totalTransfers: number;
+    successfulDeals: number;
+    failedDeals: number;
+    activeNegotiations: number;
+  };
 }
 
 export interface ExtendedOfficeState {
   level: OfficeLevel;
-  currentLevel: OfficeLevel;
+  currentLevel: number;
   experience: number;
   lastUpgrade: string;
   stats: OfficeStats;
