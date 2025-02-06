@@ -1,0 +1,138 @@
+.scout-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.scout-card:hover {
+  transform: translateY(-4px);
+}
+
+.scout-card.active {
+  border: 2px solid #1a472a;
+}
+
+.scout-card.selected {
+  border: 2px solid #1a472a;
+  background: rgba(26, 71, 42, 0.05);
+}
+
+.scout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.scout-level {
+  background: #1a472a;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.scout-specialties,
+.scout-countries {
+  margin-bottom: 1.5rem;
+}
+
+.specialty-tags,
+.country-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.specialty-tag,
+.country-tag {
+  background: rgba(26, 71, 42, 0.1);
+  color: #1a472a;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.scout-abilities {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ability {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.ability-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.ability-fill {
+  height: 100%;
+  background: #1a472a;
+  transition: width 0.3s ease;
+}
+
+.scout-status {
+  text-align: center;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.status-badge.active {
+  background: #1a472a;
+  color: white;
+}
+
+.assign-scout-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #1a472a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.assign-scout-btn:hover {
+  background: #245c3b;
+}
+
+.assign-scout-btn.selected {
+  background: #991b1b;
+}
+
+.assign-scout-btn.selected:hover {
+  background: #7f1d1d;
+}
+
+.cancel-mission-btn {
+  margin-top: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: #991b1b;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancel-mission-btn:hover {
+  background: #7f1d1d;
+} 

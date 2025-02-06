@@ -1,0 +1,134 @@
+.scout-mission-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.scout-mission-form h3 {
+  color: #1a472a;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  border-color: #1a472a;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(26, 71, 42, 0.1);
+}
+
+.form-group option.preferred {
+  background-color: rgba(26, 71, 42, 0.1);
+  font-weight: 500;
+}
+
+.mission-costs {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mission-costs h4 {
+  color: #1a472a;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.costs-breakdown {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.cost-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.cost-item:last-child {
+  border-bottom: none;
+}
+
+.cost-item.total {
+  border-top: 2px solid #e2e8f0;
+  font-weight: 600;
+  color: #1a472a;
+  padding-top: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.submit-btn,
+.cancel-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submit-btn {
+  background: #1a472a;
+  color: white;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: #245c3b;
+}
+
+.submit-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.cancel-btn:hover {
+  background: #e2e8f0;
+}
+
+@media (max-width: 640px) {
+  .scout-mission-form {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+} 

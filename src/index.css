@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Rubik', 'Assistant', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  direction: rtl;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f5f5f5;
+  color: #333;
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* תיקון כיוון לרכיבי Material-UI */
+.MuiList-root,
+.MuiMenuItem-root,
+.MuiTypography-root,
+.MuiInputBase-root {
+  text-align: right;
+}
+
+.MuiListItemIcon-root {
+  margin-left: 16px;
+  margin-right: 0;
+}
+
+/* עיצוב כרטיסים */
+.MuiCard-root {
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.MuiCard-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.MuiCardContent-root {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* עיצוב טפסים */
+.MuiFormControl-root {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+/* עיצוב כפתורים */
+.MuiButton-root {
+  font-weight: 500;
+  text-transform: none;
+  min-width: 120px;
+}
+
+/* עיצוב טבלאות */
+.MuiTableCell-root {
+  text-align: right;
+  padding: 16px;
+}
+
+.MuiTableCell-head {
+  font-weight: 600;
+  background-color: #f5f5f5;
+}
+
+/* עיצוב תפריט */
+.MuiDrawer-paper {
+  background-color: #fff;
+  border: none;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* עיצוב התראות */
+.MuiAlert-root {
+  direction: rtl;
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+/* עיצוב דיאלוגים */
+.MuiDialog-paper {
+  direction: rtl;
+  min-width: 400px;
+}
+
+/* עיצוב תפריט נפתח */
+.MuiMenu-paper {
+  direction: rtl;
+}
+
+/* עיצוב שדות טקסט */
+.MuiInputBase-input {
+  text-align: right;
+  padding: 12px 16px !important;
+}
+
+.MuiInputLabel-root {
+  right: 1.75rem;
+  left: auto;
+  transform-origin: right;
+}
+
+/* עיצוב טאבים */
+.MuiTabs-root {
+  direction: rtl;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.MuiTab-root {
+  font-weight: 500;
+  text-transform: none;
+  min-width: 120px;
+}
+
+/* עיצוב סרגל כלים */
+.MuiToolbar-root {
+  direction: rtl;
+  min-height: 64px !important;
+}
+
+/* עיצוב רשימות */
+.MuiList-padding {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+/* עיצוב אייקונים */
+.MuiSvgIcon-root {
+  font-size: 1.5rem;
+}
+
+/* עיצוב רשת */
+.MuiGrid-root {
+  margin-top: 0 !important;
+}
+
+.MuiGrid-item {
+  padding: 12px !important;
+}
+
+/* עיצוב צ'יפים */
+.MuiChip-root {
+  font-weight: 500;
+  height: 32px;
+}
+
+/* עיצוב תפריט צד */
+.MuiDrawer-paper {
+  padding-top: 16px;
+}
+
+/* התאמות לדסקטופ */
+@media (min-width: 1280px) {
+  .MuiContainer-root {
+    max-width: 1280px !important;
+  }
+
+  .MuiGrid-container {
+    margin: -12px !important;
+  }
+
+  .MuiCard-root {
+    min-height: 200px;
+  }
+}
+
+/* התאמות לטאבלט */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .MuiContainer-root {
+    padding: 0 24px !important;
+  }
+}
+
+/* התאמות למובייל */
+@media (max-width: 767px) {
+  .MuiContainer-root {
+    padding: 0 16px !important;
+  }
+
+  .MuiCard-root {
+    margin-bottom: 16px;
+  }
+} 

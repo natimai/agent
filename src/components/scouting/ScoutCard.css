@@ -1,0 +1,153 @@
+.scout-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.scout-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.scout-card.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  background: #22c55e;
+}
+
+.scout-card.selected {
+  border-color: #1a472a;
+}
+
+.scout-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.scout-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a472a;
+  margin: 0;
+}
+
+.scout-level {
+  background: #1a472a;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.scout-abilities {
+  margin-bottom: 1.5rem;
+}
+
+.ability {
+  margin-bottom: 1rem;
+}
+
+.ability:last-child {
+  margin-bottom: 0;
+}
+
+.ability span {
+  display: block;
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.ability-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.ability-fill {
+  height: 100%;
+  background: #1a472a;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.scout-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat span:first-child {
+  display: block;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 0.25rem;
+}
+
+.value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a472a;
+}
+
+.mission-status {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.mission-status span {
+  display: block;
+  text-align: center;
+  color: #22c55e;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.mission-progress {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.mission-progress-fill {
+  height: 100%;
+  background: #22c55e;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .scout-card {
+    padding: 1rem;
+  }
+
+  .scout-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .scout-stats {
+    gap: 0.5rem;
+  }
+} 

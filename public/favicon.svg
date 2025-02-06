@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <title>סוכן כדורגל</title>
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <circle fill="#1976D2" cx="16" cy="16" r="16"/>
+    <path d="M16,8 C18.7614237,8 21,10.2385763 21,13 C21,14.9365278 19.9425141,16.6073543 18.3614237,17.4365278 L20,24 L12,24 L13.6385763,17.4365278 C12.0574859,16.6073543 11,14.9365278 11,13 C11,10.2385763 13.2385763,8 16,8 Z" fill="#FFFFFF"/>
+  </g>
+</svg> 
