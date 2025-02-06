@@ -28,6 +28,9 @@ export interface GameEvent {
   isHandled: boolean;
   isImportant: boolean;
   tags: string[];
+  date: string;
+  timestamp: string;
+  data?: any;
 }
 
 export interface MonthlyReportDetails {
@@ -86,6 +89,6 @@ export interface GameState {
 export interface GameSave {
   saveDate: string;
   gameState: GameState;
-  players: any[]; // נשמור את כל מצב המשחק
+  players: Player[];
   user: any;
 } 

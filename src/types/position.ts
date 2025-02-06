@@ -13,4 +13,9 @@ export const POSITION_NAMES: Record<Position, string> = {
   LW: 'מקצה שמאלי',
   RW: 'מקצה ימני',
   ST: 'חלוץ'
-}; 
+};
+
+export interface PositionAttributes {
+  main: Position;
+  secondary?: Position[];
+} 

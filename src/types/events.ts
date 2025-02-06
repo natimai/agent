@@ -68,16 +68,8 @@ export const EVENT_TYPES = {
 
 export type EventType = keyof typeof EVENT_TYPES;
 
-export interface Event {
-  id: string;
-  title: string;
-  description: string;
-  type: EventType;
-  startDate: string; // ISO date string
-  endDate: string; // ISO date string
+export interface Event extends GameEvent {
   location: string;
-  isImportant: boolean;
-  tags: string[];
   participants?: {
     id: string;
     name: string;
@@ -92,7 +84,7 @@ export interface Event {
   }[];
   reminders?: {
     id: string;
-    time: string; // ISO date string
+    time: string;
     message: string;
     sent: boolean;
   }[];

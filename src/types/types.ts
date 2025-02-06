@@ -3,6 +3,14 @@ import { Team, TeamStats } from './team';
 import { TransferMarket } from './transfers';
 import { ExtendedOfficeState } from './office';
 import { ScoutingState } from './scouting';
+import { AuthState } from '../store/slices/authSlice';
+import { FinanceState } from './finance';
+import { GameState } from './game';
+import { AgentState } from '../store/slices/agentSlice';
+import { AssetsState } from './assets';
+import { EquipmentState } from '../store/slices/equipmentSlice';
+import { ContactsState } from './contacts';
+import { EventsState } from './events';
 
 export interface Notification {
   id: string;
@@ -25,6 +33,18 @@ export interface PlayersState {
   players: Player[];
   isLoading: boolean;
   error: string | null;
+  filters: {
+    position: string | null;
+    minAge: number | null;
+    maxAge: number | null;
+    minValue: number | null;
+    maxValue: number | null;
+    nationality: string | null;
+  };
+  sort: {
+    field: keyof Player | null;
+    direction: 'asc' | 'desc';
+  };
 }
 
 export interface TeamState {
@@ -45,11 +65,17 @@ export interface SalaryPayment {
 }
 
 export interface RootState {
+  auth: AuthState;
   players: PlayersState;
-  transfers: TransferMarket;
-  office: ExtendedOfficeState;
+  finance: FinanceState;
+  game: GameState;
+  agent: AgentState;
+  assets: AssetsState;
+  equipment: EquipmentState;
+  scouting: ScoutingState;
+  contacts: ContactsState;
+  events: EventsState;
   treasury: TreasuryState;
   notifications: NotificationsState;
   team: TeamState;
-  scouting: ScoutingState;
 } 

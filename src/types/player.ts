@@ -7,10 +7,10 @@ export interface PlayerAttributes {
   dribbling: number;
   defending: number;
   physical: number;
+  goalkeeping: number;
   handling?: number;
   reflexes?: number;
   positioning?: number;
-  goalkeeping: number;
 }
 
 export interface PlayerStats {
@@ -22,9 +22,12 @@ export interface PlayerStats {
   redCards: number;
   rating: number;
   form: number;
+  averageRating: number;
+  minutesPlayed: number;
+  totalRating: number;
 }
 
-export type PlayerPosition = 'GK' | 'CB' | 'LB' | 'RB' | 'DM' | 'CM' | 'LM' | 'RM' | 'AM' | 'ST';
+export type PlayerPosition = Position;
 
 export interface PlayerContract {
   team: string;
@@ -47,6 +50,8 @@ export interface PlayerInjury {
   severity: 'MINOR' | 'MODERATE' | 'SEVERE';
   startDate: string;
   endDate: string;
+  durationDays: number;
+  isRecovered?: boolean;
 }
 
 export interface LastMatch {
@@ -57,6 +62,12 @@ export interface LastMatch {
   goals: number;
   assists: number;
   cleanSheet?: boolean;
+  stats: {
+    goals: number;
+    assists: number;
+    minutesPlayed: number;
+    rating: number;
+  };
 }
 
 export interface Player {
@@ -84,6 +95,22 @@ export interface Player {
   };
   isDiscovered: boolean;
   scoutingProgress?: number;
+  isInjured: boolean;
+  injuryHistory: PlayerInjury[];
+  development: {
+    trainingPerformance?: number;
+    potentialGrowth?: number;
+    lastProgressDate: string;
+  };
+  marketStatus: {
+    isTransferListed: boolean;
+    isLoanListed: boolean;
+    askingPrice?: number;
+    interestedClubs: string[];
+  };
+  wage: number;
+  image?: string;
+  avatar?: string;
 }
 
 export const POSITION_NAMES: Record<PlayerPosition, string> = {
